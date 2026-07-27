@@ -1,0 +1,894 @@
+/* ==========================================================================
+   그래프 눈금 수사대 - 단일 스타일시트 (사양서 14절)
+   설계 원칙:
+   - 색상 비의존: 정직/주의는 색 외 텍스처·라벨로 구분 (사양서 12·10.2절)
+   - 모션 줄이기: prefers-reduced-motion (사양서 12절)
+   - 터치 영역 44px+, 포커스 표시 명확 (사양서 12절)
+   - 모바일: 자료→그래프→근거→수정 세로 흐름 (사양서 11.2절)
+   ========================================================================== */
+
+/* ---- 기본 리셋 & 변수 ---- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+:root {
+  /* 정직(fair): 파란 사선 텍스처 */
+  --gi-fair-fg: #1d4ed8;
+  --gi-fair-bg: #dbeafe;
+  /* 주의(watch): 호박 점 텍스처 */
+  --gi-watch-fg: #b45309;
+  --gi-watch-bg: #fef3c7;
+
+  --gi-text: #1f2937;
+  --gi-text-muted: #6b7280;
+  --gi-surface: #ffffff;
+  --gi-surface-2: #f9fafb;
+  --gi-border: #e5e7eb;
+  --gi-border-strong: #9ca3af;
+
+  --gi-focus: #2563eb;
+  --gi-radius: 10px;
+
+  /* 사양서 12절: 터치 영역 44px+ */
+  --gi-touch: 44px;
+
+  --gi-font: 'Pretendard', 'Apple SD Gothic Neo', 'Noto Sans KR', system-ui, -apple-system,
+    'Segoe UI', sans-serif;
+}
+
+html {
+  font-size: 16px;
+}
+
+body {
+  margin: 0;
+  font-family: var(--gi-font);
+  color: var(--gi-text);
+  background: var(--gi-surface-2);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+/* 포커스 표시 명확 (사양서 12절) */
+:focus-visible {
+  outline: 3px solid var(--gi-focus);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* 스크린리더 전용 */
+.gi-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ---- 시작 화면 ---- */
+.gi-start {
+  max-width: 880px;
+  margin: 0 auto;
+  padding: 24px 20px 64px;
+}
+
+.gi-start-header {
+  text-align: center;
+  padding: 32px 16px 24px;
+}
+
+.gi-start-eyebrow {
+  color: var(--gi-text-muted);
+  font-size: 0.875rem;
+  letter-spacing: 0.02em;
+  margin: 0 0 8px;
+}
+
+.gi-start-title {
+  font-size: clamp(1.8rem, 5vw, 2.6rem);
+  margin: 0 0 12px;
+  color: var(--gi-text);
+}
+
+.gi-start-subtitle {
+  color: var(--gi-text-muted);
+  font-size: 1.05rem;
+  margin: 0;
+}
+
+.gi-start-intro {
+  background: var(--gi-surface);
+  border: 1px solid var(--gi-border);
+  border-radius: var(--gi-radius);
+  padding: 24px;
+  margin: 24px 0;
+}
+
+.gi-start-procedure {
+  margin: 16px 0 0;
+  padding-left: 20px;
+}
+
+.gi-start-procedure li {
+  margin: 6px 0;
+}
+
+.gi-start-meta {
+  color: var(--gi-text-muted);
+  font-size: 0.875rem;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px dashed var(--gi-border);
+}
+
+.gi-start-h2 {
+  font-size: 1.25rem;
+  margin: 0 0 16px;
+}
+
+.gi-mission-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 12px;
+}
+
+.gi-mission-card {
+  width: 100%;
+  min-height: var(--gi-touch);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  padding: 16px 20px;
+  background: var(--gi-surface);
+  border: 1.5px solid var(--gi-border);
+  border-radius: var(--gi-radius);
+  cursor: pointer;
+  text-align: left;
+  font: inherit;
+  color: var(--gi-text);
+  transition: border-color 0.15s, transform 0.1s;
+}
+
+.gi-mission-card:hover {
+  border-color: var(--gi-border-strong);
+}
+
+.gi-mission-card:active {
+  transform: scale(0.99);
+}
+
+.gi-mission-card-num {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--gi-fair-fg);
+  background: var(--gi-fair-bg);
+  padding: 2px 8px;
+  border-radius: 99px;
+}
+
+.gi-mission-card-title {
+  font-weight: 700;
+  font-size: 1.05rem;
+}
+
+.gi-mission-card-concept {
+  font-size: 0.85rem;
+  color: var(--gi-text-muted);
+}
+
+.gi-start-updates {
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid var(--gi-border);
+}
+
+.gi-updates-body {
+  background: var(--gi-surface);
+  border: 1px solid var(--gi-border);
+  border-radius: var(--gi-radius);
+  padding: 16px 20px;
+  margin-top: 12px;
+}
+
+.gi-updates-body ul {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.gi-updates-body li {
+  margin: 8px 0;
+  font-size: 0.9rem;
+}
+
+/* ---- 미션 화면 ---- */
+.gi-mission {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 16px 20px 80px;
+}
+
+.gi-mission-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.gi-mission-progress {
+  color: var(--gi-text-muted);
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.gi-mission-title-block {
+  margin-bottom: 16px;
+}
+
+.gi-mission-title {
+  font-size: clamp(1.4rem, 3.5vw, 1.8rem);
+  margin: 0 0 8px;
+}
+
+.gi-mission-story {
+  color: var(--gi-text-muted);
+  margin: 0;
+  font-size: 1rem;
+}
+
+/* 단계 표시기 */
+.gi-phase-indicator {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 20px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.gi-phase-dot {
+  font-size: 0.78rem;
+  padding: 6px 10px;
+  border-radius: 99px;
+  background: var(--gi-surface);
+  border: 1px solid var(--gi-border);
+  color: var(--gi-text-muted);
+}
+
+.gi-phase-active {
+  background: var(--gi-fair-fg);
+  color: #fff;
+  border-color: var(--gi-fair-fg);
+  font-weight: 700;
+}
+
+/* ---- 값 표 ---- */
+.gi-value-table-section {
+  margin-bottom: 20px;
+}
+
+.gi-tool-toggle {
+  width: 100%;
+  min-height: var(--gi-touch);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px;
+  background: var(--gi-surface);
+  border: 1.5px solid var(--gi-border-strong);
+  border-radius: var(--gi-radius);
+  cursor: pointer;
+  font: inherit;
+  font-weight: 600;
+  color: var(--gi-text);
+}
+
+.gi-tool-icon {
+  font-size: 0.75rem;
+  color: var(--gi-text-muted);
+}
+
+.gi-tool-required {
+  margin-left: auto;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 3px 8px;
+  background: var(--gi-watch-bg);
+  color: var(--gi-watch-fg);
+  border-radius: 99px;
+}
+
+.gi-value-table-body {
+  background: var(--gi-surface);
+  border: 1px solid var(--gi-border);
+  border-top: none;
+  border-radius: 0 0 var(--gi-radius) var(--gi-radius);
+  padding: 16px;
+  overflow-x: auto; /* 사양서 12절: 표 가로 스크롤 */
+}
+
+.gi-value-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+
+.gi-value-table th,
+.gi-value-table td {
+  border: 1px solid var(--gi-border);
+  padding: 8px 12px;
+  text-align: center;
+}
+
+.gi-value-table thead th {
+  background: var(--gi-surface-2);
+  font-weight: 700;
+}
+
+.gi-value-table tbody th {
+  background: var(--gi-surface-2);
+}
+
+.gi-value-table-note {
+  margin: 12px 0 0;
+  font-size: 0.85rem;
+  color: var(--gi-text-muted);
+}
+
+/* ---- 비교 패널 ---- */
+.gi-compare-panel {
+  margin-bottom: 24px;
+}
+
+.gi-compare-header {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.gi-compare-title {
+  font-size: 1.15rem;
+  margin: 0;
+}
+
+.gi-tool-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.gi-tool-chip {
+  min-height: 36px;
+  padding: 6px 14px;
+  background: var(--gi-surface);
+  border: 1.5px solid var(--gi-border);
+  border-radius: 99px;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.875rem;
+  color: var(--gi-text);
+}
+
+.gi-tool-chip-on {
+  background: var(--gi-fair-bg);
+  border-color: var(--gi-fair-fg);
+  color: var(--gi-fair-fg);
+  font-weight: 700;
+}
+
+.gi-compare-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+  align-items: start;
+}
+
+.gi-compare-prompt {
+  margin: 16px 0 0;
+  padding: 12px 16px;
+  background: var(--gi-fair-bg);
+  border-radius: var(--gi-radius);
+  font-size: 0.95rem;
+}
+
+/* ---- 차트 ---- */
+.gi-chart-figure {
+  margin: 0;
+  background: var(--gi-surface);
+  border: 1.5px solid var(--gi-border);
+  border-radius: var(--gi-radius);
+  padding: 12px;
+}
+
+.gi-chart-selected {
+  border-color: var(--gi-fair-fg);
+  border-width: 2.5px;
+  box-shadow: 0 0 0 3px var(--gi-fair-bg);
+}
+
+.gi-chart-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+}
+
+.gi-chart-tag {
+  font-weight: 700;
+  font-size: 0.95rem;
+  padding: 4px 10px;
+  border-radius: 6px;
+}
+
+.gi-chart-tag-fair {
+  background: var(--gi-fair-bg);
+  color: var(--gi-fair-fg);
+  /* 텍스처 표식 - 색 외 구분 (사양서 12절) */
+  border-left: 4px solid var(--gi-fair-fg);
+}
+
+.gi-chart-tag-watch {
+  background: var(--gi-watch-bg);
+  color: var(--gi-watch-fg);
+  border-left: 4px dashed var(--gi-watch-fg);
+}
+
+.gi-chart-tag-label {
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.gi-chart-select-btn {
+  min-height: 36px;
+  padding: 6px 12px;
+  background: var(--gi-surface);
+  border: 1.5px solid var(--gi-fair-fg);
+  border-radius: 99px;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.85rem;
+  color: var(--gi-fair-fg);
+  font-weight: 600;
+}
+
+.gi-chart-select-btn[aria-pressed='true'] {
+  background: var(--gi-fair-fg);
+  color: #fff;
+}
+
+.gi-chart-svg {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+.gi-chart-axis-text,
+.gi-chart-category {
+  fill: var(--gi-text);
+}
+
+.gi-chart-axis-label {
+  fill: var(--gi-text);
+}
+
+.gi-chart-value-label {
+  fill: var(--gi-text);
+}
+
+.gi-chart-diff-label {
+  fill: var(--gi-watch-fg);
+}
+
+/* ---- 섹션 공통 ---- */
+.gi-section-title {
+  font-size: 1.15rem;
+  margin: 0 0 8px;
+}
+
+.gi-subsection-title {
+  font-size: 1rem;
+  margin: 0 0 10px;
+}
+
+.gi-section-desc {
+  color: var(--gi-text-muted);
+  margin: 0 0 16px;
+  font-size: 0.92rem;
+}
+
+/* ---- 근거 패널 ---- */
+.gi-evidence-panel,
+.gi-repair-panel {
+  background: var(--gi-surface);
+  border: 1px solid var(--gi-border);
+  border-radius: var(--gi-radius);
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.gi-evidence-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 16px;
+  display: grid;
+  gap: 8px;
+}
+
+.gi-evidence-item {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  min-height: var(--gi-touch);
+  padding: 10px 14px;
+  border: 1.5px solid var(--gi-border);
+  border-radius: var(--gi-radius);
+  cursor: pointer;
+  background: var(--gi-surface-2);
+}
+
+.gi-evidence-item input[type='checkbox'] {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+.gi-evidence-on {
+  background: #fef9c3; /* 형광펜 느낌 - 사양서 7.2절 "근거 형광펜" */
+  border-color: #ca8a04;
+}
+
+.gi-evidence-label {
+  font-weight: 600;
+}
+
+.gi-evidence-explain {
+  width: 100%;
+  font-size: 0.82rem;
+  color: var(--gi-text-muted);
+  padding-left: 28px;
+}
+
+.gi-evidence-feedback {
+  padding: 12px 16px;
+  border-radius: var(--gi-radius);
+  font-size: 0.92rem;
+  margin-bottom: 16px;
+}
+
+.gi-feedback-full {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.gi-feedback-partial {
+  background: var(--gi-watch-bg);
+  color: var(--gi-watch-fg);
+}
+
+.gi-feedback-hint {
+  background: var(--gi-surface-2);
+  color: var(--gi-text-muted);
+  border: 1px dashed var(--gi-border);
+}
+
+/* 문장 틀 */
+.gi-template-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.gi-template-btn {
+  min-height: 36px;
+  padding: 6px 16px;
+  background: var(--gi-surface);
+  border: 1.5px solid var(--gi-border);
+  border-radius: 99px;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.875rem;
+}
+
+.gi-template-on {
+  background: var(--gi-fair-fg);
+  color: #fff;
+  border-color: var(--gi-fair-fg);
+  font-weight: 700;
+}
+
+.gi-sentence-fill {
+  line-height: 2.4;
+  font-size: 1rem;
+}
+
+.gi-blank-input {
+  display: inline-block;
+  min-width: 80px;
+  padding: 4px 8px;
+  margin: 0 4px;
+  border: none;
+  border-bottom: 2px solid var(--gi-fair-fg);
+  background: var(--gi-fair-bg);
+  font: inherit;
+  border-radius: 4px 4px 0 0;
+}
+
+.gi-blank-input:focus {
+  outline: 2px solid var(--gi-focus);
+  outline-offset: 2px;
+}
+
+.gi-blank-count {
+  color: var(--gi-text-muted);
+  font-size: 0.8rem;
+  margin-left: 8px;
+}
+
+/* ---- 축 수리 패널 ---- */
+.gi-repair-grid {
+  display: grid;
+  grid-template-columns: minmax(220px, 320px) 1fr;
+  gap: 20px;
+  align-items: start;
+}
+
+.gi-repair-form {
+  border: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 12px;
+}
+
+.gi-field {
+  display: grid;
+  gap: 4px;
+}
+
+.gi-field-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--gi-text-muted);
+}
+
+.gi-field-input {
+  min-height: var(--gi-touch);
+  padding: 8px 12px;
+  border: 1.5px solid var(--gi-border);
+  border-radius: 8px;
+  font: inherit;
+  background: var(--gi-surface);
+}
+
+.gi-repair-feedback {
+  margin-top: 16px;
+  padding: 14px 16px;
+  border-radius: var(--gi-radius);
+}
+
+.gi-feedback-ok {
+  background: #dcfce7;
+  border: 1px solid #86efac;
+}
+
+.gi-feedback-hint {
+  background: var(--gi-watch-bg);
+  border: 1px solid var(--gi-watch-fg);
+}
+
+.gi-feedback-status {
+  font-weight: 700;
+  margin: 0 0 6px;
+}
+
+.gi-feedback-reasons {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.gi-feedback-hint-text {
+  margin: 8px 0 0;
+  font-size: 0.9rem;
+}
+
+/* ---- 결과 카드 ---- */
+.gi-result-card {
+  background: var(--gi-surface);
+  border: 1.5px solid var(--gi-border-strong);
+  border-radius: var(--gi-radius);
+  padding: 24px;
+}
+
+.gi-result-cheer {
+  color: var(--gi-fair-fg);
+  font-weight: 600;
+  margin: 0 0 16px;
+}
+
+.gi-result-body {
+  display: grid;
+  gap: 12px;
+  padding: 16px;
+  background: var(--gi-surface-2);
+  border-radius: var(--gi-radius);
+  margin-bottom: 16px;
+}
+
+.gi-result-row {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  gap: 12px;
+  align-items: start;
+}
+
+.gi-result-note-row {
+  grid-template-columns: 1fr;
+}
+
+.gi-result-label {
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: var(--gi-text-muted);
+}
+
+.gi-result-value {
+  font-size: 0.95rem;
+}
+
+.gi-result-actions {
+  margin-bottom: 16px;
+}
+
+.gi-result-nav {
+  margin-top: 8px;
+}
+
+/* ---- 버튼 ---- */
+.gi-primary-btn {
+  min-height: var(--gi-touch);
+  padding: 10px 24px;
+  background: var(--gi-fair-fg);
+  color: #fff;
+  border: none;
+  border-radius: var(--gi-radius);
+  cursor: pointer;
+  font: inherit;
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+.gi-primary-btn:hover {
+  filter: brightness(1.05);
+}
+
+.gi-primary-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.gi-secondary-btn {
+  min-height: var(--gi-touch);
+  padding: 10px 20px;
+  background: var(--gi-surface);
+  color: var(--gi-text);
+  border: 1.5px solid var(--gi-border-strong);
+  border-radius: var(--gi-radius);
+  cursor: pointer;
+  font: inherit;
+  font-weight: 600;
+}
+
+.gi-link-btn {
+  min-height: var(--gi-touch);
+  padding: 8px 12px;
+  background: transparent;
+  color: var(--gi-fair-fg);
+  border: none;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 600;
+  font-size: 0.92rem;
+  text-decoration: none;
+}
+
+.gi-link-btn:disabled {
+  color: var(--gi-text-muted);
+  cursor: not-allowed;
+}
+
+/* ---- 단계 네비게이션 ---- */
+.gi-phase-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid var(--gi-border);
+  flex-wrap: wrap;
+}
+
+.gi-gate-msg {
+  width: 100%;
+  padding: 10px 14px;
+  background: var(--gi-watch-bg);
+  color: var(--gi-watch-fg);
+  border-radius: var(--gi-radius);
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.gi-check-values-prompt {
+  padding: 12px 16px;
+  background: var(--gi-watch-bg);
+  border-left: 4px solid var(--gi-watch-fg);
+  border-radius: var(--gi-radius);
+  font-size: 0.92rem;
+}
+
+/* ---- 모바일: 세로 흐름 (사양서 11.2절) ---- */
+@media (max-width: 640px) {
+  .gi-repair-grid {
+    grid-template-columns: 1fr;
+  }
+  .gi-compare-grid {
+    grid-template-columns: 1fr;
+  }
+  .gi-chart-svg {
+    /* 모바일에서 차트가 너무 작아지지 않게 */
+    min-width: 280px;
+  }
+  .gi-mission {
+    padding: 12px 14px 80px;
+  }
+  .gi-phase-dot {
+    font-size: 0.7rem;
+    padding: 4px 8px;
+  }
+  .gi-result-row {
+    grid-template-columns: 1fr;
+    gap: 2px;
+  }
+}
+
+/* ---- 모션 줄이기 (사양서 12절) ---- */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ---- 고대비 모드 지원 ---- */
+@media (prefers-contrast: more) {
+  :root {
+    --gi-border: #6b7280;
+    --gi-border-strong: #374151;
+  }
+  .gi-chart-figure {
+    border-width: 2px;
+  }
+}

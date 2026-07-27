@@ -1,0 +1,18 @@
+node_modules
+dist
+dist-ssr
+*.local
+.DS_Store
+.vscode/*
+!.vscode/extensions.json
+*.log
+coverage
+
+# TypeScript 증분 빌드 캐시
+*.tsbuildinfo
+
+# 로컬 세션 산물
+.zcode/
+
+# GUI 테스트 스크린샷
+gui-test-screenshots/
