@@ -18,6 +18,7 @@ type Props = {
 
 export function ResultCard({ caseData, state, onPrev, onNext, isLast }: Props) {
   const [copied, setCopied] = useState(false)
+  const [showTextFallback, setShowTextFallback] = useState(false)
 
   const lines = [
     `[수사 기록] ${caseData.title}`,
@@ -39,8 +40,9 @@ export function ResultCard({ caseData, state, onPrev, onNext, isLast }: Props) {
       setCopied(true)
       setTimeout(() => setCopied(false), 2000)
     } catch {
-      // 클립보드 미지원 시 수동 복사 유도
+      // 클립보드 미지원/거부 시 — 텍스트를 선택 가능한 영역으로 노출해 수동 복사 유도
       setCopied(false)
+      setShowTextFallback(true)
     }
   }
 
@@ -89,6 +91,15 @@ export function ResultCard({ caseData, state, onPrev, onNext, isLast }: Props) {
         <button type="button" className="gi-secondary-btn" onClick={handleCopy}>
           {copied ? '✓ 복사됨' : '기록 복사'}
         </button>
+        <span className="gi-sr-only" role="status" aria-live="polite">
+          {copied ? '수사 기록이 클립보드에 복사되었습니다.' : ''}
+        </span>
+        {showTextFallback && (
+          <label className="gi-copy-fallback">
+            복사가 안 되면 아래 글을 직접 드래그해서 복사하세요.
+            <textarea readOnly value={text} rows={6} onFocus={(e) => e.currentTarget.select()} />
+          </label>
+        )}
       </div>
 
       <div className="gi-phase-nav gi-result-nav">

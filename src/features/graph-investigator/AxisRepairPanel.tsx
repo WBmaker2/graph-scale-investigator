@@ -68,6 +68,8 @@ export function AxisRepairPanel({ caseData, onRepaired }: Props) {
             <span className="gi-field-label">시작값</span>
             <input
               type="number"
+              name="axis-min"
+              autoComplete="off"
               className="gi-field-input"
               value={min}
               onChange={(e) => {
@@ -81,6 +83,8 @@ export function AxisRepairPanel({ caseData, onRepaired }: Props) {
             <span className="gi-field-label">끝값</span>
             <input
               type="number"
+              name="axis-max"
+              autoComplete="off"
               className="gi-field-input"
               value={max}
               onChange={(e) => {
@@ -94,6 +98,8 @@ export function AxisRepairPanel({ caseData, onRepaired }: Props) {
             <span className="gi-field-label">눈금 한 칸</span>
             <input
               type="number"
+              name="axis-tickstep"
+              autoComplete="off"
               className="gi-field-input"
               value={tickStep}
               onChange={(e) => {
@@ -108,6 +114,7 @@ export function AxisRepairPanel({ caseData, onRepaired }: Props) {
             <span className="gi-field-label">단위</span>
             <select
               className="gi-field-input"
+              autoComplete="off"
               value={unit}
               onChange={(e) => {
                 setUnit(e.target.value)

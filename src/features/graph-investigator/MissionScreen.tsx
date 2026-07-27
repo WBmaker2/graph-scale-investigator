@@ -5,7 +5,7 @@
  *  - 각 단계마다 수사 도구 노출 (사양서 7.2절)
  *  - 모바일: 자료→그래프→근거→수정 세로 흐름 (사양서 11.2절)
  */
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import type { GraphCase } from '@/types'
 import { useInvestigationState } from './useInvestigationState'
 import { GraphComparePanel } from './GraphComparePanel'
@@ -53,6 +53,12 @@ export function MissionScreen({
   const [valueTableOpen, setValueTableOpen] = useState(false)
   const [zeroStartTool, setZeroStartTool] = useState(false)
   const [gateMsg, setGateMsg] = useState<string | null>(null)
+  const phaseRef = useRef<HTMLOListElement>(null)
+
+  // 단계가 바뀌면 단계 표시기로 부드럽게 스크롤 (prefers-reduced-motion 존중은 브라우저가 처리)
+  useEffect(() => {
+    phaseRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }, [state.phase])
 
   const handleNextPhase = () => {
     const r = nextPhase()
@@ -83,7 +89,7 @@ export function MissionScreen({
         <button type="button" className="gi-link-btn" onClick={onExit}>
           ← 미션 목록
         </button>
-        <div className="gi-mission-progress" aria-label="미션 진행 상태">
+        <div className="gi-mission-progress" role="status" aria-label="미션 진행 상태">
           미션 {missionIndex + 1} / {totalMissions}
         </div>
       </header>
@@ -94,7 +100,7 @@ export function MissionScreen({
       </div>
 
       {/* 단계 표시기 */}
-      <ol className="gi-phase-indicator" aria-label="수사 단계">
+      <ol ref={phaseRef} className="gi-phase-indicator" aria-label="수사 단계">
         {Object.entries(PHASE_LABELS).map(([key, label]) => (
           <li
             key={key}
@@ -170,7 +176,7 @@ export function MissionScreen({
 
       {/* 단계 이동 */}
       {!isLastPhase && (
-        <div className="gi-phase-nav">
+        <div className="gi-phase-nav gi-phase-nav-sticky">
           {gateMsg && (
             <p className="gi-gate-msg" role="alert">
               {gateMsg}

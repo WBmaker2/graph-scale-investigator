@@ -74,7 +74,7 @@ export function StartScreen({ onStart }: Props) {
           aria-controls="updates-body"
           onClick={() => setShowUpdates((v) => !v)}
         >
-          {showUpdates ? '▼' : '▶'} 업데이트 내역
+          <span aria-hidden="true">{showUpdates ? '▼' : '▶'}</span> 업데이트 내역
         </button>
         {showUpdates && (
           <div id="updates-body" className="gi-updates-body">

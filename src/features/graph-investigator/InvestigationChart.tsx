@@ -34,8 +34,8 @@ export function InvestigationChart({
   caseData,
   showValueLabels = true,
   showActualDiff = false,
-  width = 320,
-  height = 240,
+  width = 360,
+  height = 280,
   selected = false,
   onSelect,
 }: Props) {
@@ -44,8 +44,8 @@ export function InvestigationChart({
   const values = caseData.values
   const categories = caseData.categories
 
-  // 여백: 왼쪽(축 라벨), 아래(범주), 위(여유)
-  const margin = { top: 24, right: 16, bottom: 48, left: 48 }
+  // 여백: 왼쪽(축 라벨), 아래(범주), 위(여유). 라벨 가독성 위해 여유 확대 (스크린샷 개선점)
+  const margin = { top: 28, right: 18, bottom: 54, left: 54 }
   const innerW = width - margin.left - margin.right
   const innerH = height - margin.top - margin.bottom
 
@@ -79,7 +79,6 @@ export function InvestigationChart({
   return (
     <figure
       className={`gi-chart-figure ${selected ? 'gi-chart-selected' : ''}`}
-      role="figure"
       aria-label={title}
     >
       <div className="gi-chart-header">
@@ -150,15 +149,15 @@ export function InvestigationChart({
                 y1={y}
                 x2={width - margin.right}
                 y2={y}
-                stroke="#d1d5db"
+                stroke="#cbd5e1"
                 strokeWidth="1"
                 strokeDasharray="2 3"
               />
               <text
-                x={margin.left - 6}
+                x={margin.left - 8}
                 y={y + 4}
                 textAnchor="end"
-                fontSize="11"
+                fontSize="12"
                 className="gi-chart-axis-text"
               >
                 {t}
@@ -173,7 +172,7 @@ export function InvestigationChart({
           y1={margin.top}
           x2={margin.left}
           y2={margin.top + innerH}
-          stroke="#374151"
+          stroke="#475569"
           strokeWidth="1.5"
         />
         {/* 가로축 선 */}
@@ -182,25 +181,24 @@ export function InvestigationChart({
           y1={margin.top + innerH}
           x2={width - margin.right}
           y2={margin.top + innerH}
-          stroke="#374151"
+          stroke="#475569"
           strokeWidth="1.5"
         />
 
         {/* 세로축 라벨 (단위 포함) */}
         <text
           x={12}
-          y={margin.top - 8}
-          fontSize="11"
+          y={margin.top - 10}
+          fontSize="12"
           className="gi-chart-axis-label"
-          fontWeight="600"
         >
           {axis.label}
         </text>
         {/* 한 칸 값 안내 */}
         <text
           x={12}
-          y={height - 8}
-          fontSize="10"
+          y={height - 6}
+          fontSize="11"
           className="gi-chart-axis-text"
         >
           한 칸 = {axis.tickStep}{axis.unit}
@@ -225,10 +223,9 @@ export function InvestigationChart({
                 {showValueLabels && (
                   <text
                     x={barX(i) + barWidth / 2}
-                    y={y - 6}
+                    y={y - 7}
                     textAnchor="middle"
-                    fontSize="11"
-                    fontWeight="600"
+                    fontSize="12"
                     className="gi-chart-value-label"
                   >
                     {v}
@@ -236,9 +233,9 @@ export function InvestigationChart({
                 )}
                 <text
                   x={barX(i) + barWidth / 2}
-                  y={margin.top + innerH + 18}
+                  y={margin.top + innerH + 20}
                   textAnchor="middle"
-                  fontSize="11"
+                  fontSize="12"
                   className="gi-chart-category"
                 >
                   {categories[i]}
@@ -295,10 +292,9 @@ export function InvestigationChart({
                   {showValueLabels && (
                     <text
                       x={x}
-                      y={y - 10}
+                      y={y - 11}
                       textAnchor="middle"
-                      fontSize="11"
-                      fontWeight="600"
+                      fontSize="12"
                       className="gi-chart-value-label"
                     >
                       {v}
@@ -306,9 +302,9 @@ export function InvestigationChart({
                   )}
                   <text
                     x={x}
-                    y={margin.top + innerH + 18}
+                    y={margin.top + innerH + 20}
                     textAnchor="middle"
-                    fontSize="11"
+                    fontSize="12"
                     className="gi-chart-category"
                   >
                     {categories[i]}

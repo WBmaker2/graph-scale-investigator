@@ -13,5 +13,6 @@ export default defineConfig({
     // 노드 테스트는 기본 환경, 컴포넌트 테스트는 doc block으로 jsdom 지정
     environment: 'node',
     include: ['test/**/*.test.ts', 'test/**/*.test.tsx'],
+    setupFiles: ['./test/setup.ts'],
   },
 })

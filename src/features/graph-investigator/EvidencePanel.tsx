@@ -60,6 +60,7 @@ export function EvidencePanel({ caseData, state, onToggleEvidence, onNoteChange 
               <label className={`gi-evidence-item ${checked ? 'gi-evidence-on' : ''}`}>
                 <input
                   type="checkbox"
+                  name={`evidence-${ev.id}`}
                   checked={checked}
                   onChange={() => onToggleEvidence(ev.id)}
                 />
@@ -83,13 +84,29 @@ export function EvidencePanel({ caseData, state, onToggleEvidence, onNoteChange 
 
       <div className="gi-sentence-builder">
         <h4 className="gi-subsection-title">설명 문장 완성하기</h4>
-        <div className="gi-template-row" role="radiogroup" aria-label="문장 틀 선택">
+        <div
+          className="gi-template-row"
+          role="radiogroup"
+          aria-label="문장 틀 선택"
+          onKeyDown={(e) => {
+            // WAI-ARIA radiogroup 키보드: 좌/우(또는 상/하) 화살표로 이동
+            const count = caseData.sentenceTemplates.length
+            if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+              e.preventDefault()
+              handleTemplateChange((selectedTemplate + 1) % count)
+            } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+              e.preventDefault()
+              handleTemplateChange((selectedTemplate - 1 + count) % count)
+            }
+          }}
+        >
           {caseData.sentenceTemplates.map((_, i) => (
             <button
               key={i}
               type="button"
               role="radio"
               aria-checked={selectedTemplate === i}
+              tabIndex={selectedTemplate === i ? 0 : -1}
               className={`gi-template-btn ${selectedTemplate === i ? 'gi-template-on' : ''}`}
               onClick={() => handleTemplateChange(i)}
             >
@@ -106,9 +123,12 @@ export function EvidencePanel({ caseData, state, onToggleEvidence, onNoteChange 
                 <input
                   type="text"
                   className="gi-blank-input"
+                  name={`blank-${selectedTemplate}-${i}`}
+                  autoComplete="off"
+                  spellCheck={false}
                   value={blanks[i] ?? ''}
                   onChange={(e) => handleBlankChange(i, e.target.value)}
-                  placeholder={`빈칸 ${i + 1}`}
+                  placeholder="예: 6개…"
                   aria-label={`빈칸 ${i + 1}`}
                   style={{ width: `${Math.max(60, (blanks[i]?.length ?? 4) * 12 + 40)}px` }}
                 />
