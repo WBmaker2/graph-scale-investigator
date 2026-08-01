@@ -128,7 +128,7 @@ export function EvidencePanel({ caseData, state, onToggleEvidence, onNoteChange 
                   spellCheck={false}
                   value={blanks[i] ?? ''}
                   onChange={(e) => handleBlankChange(i, e.target.value)}
-                  placeholder="예: 6개…"
+                  placeholder="여기에 써요…"
                   aria-label={`빈칸 ${i + 1}`}
                   style={{ width: `${Math.max(60, (blanks[i]?.length ?? 4) * 12 + 40)}px` }}
                 />

@@ -94,7 +94,7 @@ export function InvestigationChart({
             aria-pressed={selected}
             aria-label={`${variant.displayName}을(를) 차이가 더 크게 보이는 그래프로 선택`}
           >
-            {selected ? '선택됨' : '이쪽이 더 커 보여요'}
+            {selected ? `✓ ${variant.id}번 선택됨` : `${variant.id}번이 더 커 보여요`}
           </button>
         )}
       </div>

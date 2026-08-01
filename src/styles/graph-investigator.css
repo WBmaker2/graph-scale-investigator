@@ -179,11 +179,6 @@ a {
   margin: 0 0 16px;
   color: var(--gi-text);
   text-wrap: balance;
-  /* 자연스러운 색감 그라데이션 텍스트 (AI-tell 아님, 제품 이유: 수사대 콘셉트 강조) */
-  background: linear-gradient(135deg, var(--gi-text) 0%, var(--gi-accent-deep) 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
 }
 
 .gi-start-subtitle {
@@ -265,7 +260,7 @@ a {
   padding: 0;
   margin: 0;
   display: grid;
-  gap: 14px;
+  gap: 16px;
 }
 
 .gi-mission-card {
@@ -396,6 +391,23 @@ a {
   gap: 8px;
   /* 가이드라인: scroll anchor 시 상단 여유 */
   scroll-margin-top: 16px;
+}
+
+/* observe 단계 선택 유도 힌트 */
+.gi-observe-hint {
+  margin: 16px 0 0;
+  padding: 14px 18px;
+  background: var(--gi-fair-bg);
+  border-left: 4px solid var(--gi-accent);
+  border-radius: var(--gi-radius-sm);
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--gi-accent-deep);
+}
+.gi-observe-hint.gi-hint-done {
+  background: var(--gi-success-bg);
+  border-left-color: var(--gi-success-fg);
+  color: var(--gi-success-fg);
 }
 
 .gi-phase-dot {
@@ -1115,9 +1127,24 @@ a {
   .gi-start-header {
     padding: 32px 8px 24px;
   }
+  /* 모바일: 단계 표시기 가로 스크롤 (5개가 한 줄에 안 들어갈 때 잘림 방지) */
+  .gi-phase-indicator {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    /* 스크롤바 숨김 */
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    margin-inline: -14px;
+    padding-inline: 14px;
+  }
+  .gi-phase-indicator::-webkit-scrollbar {
+    display: none;
+  }
   .gi-phase-dot {
     font-size: 0.7rem;
     padding: 5px 9px;
+    white-space: nowrap;
+    flex-shrink: 0;
   }
   .gi-result-row {
     grid-template-columns: 1fr;

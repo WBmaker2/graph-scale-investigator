@@ -15,6 +15,20 @@ import { GraphInvestigatorApp } from '@/features/graph-investigator/GraphInvesti
 import { InvestigationChart } from '@/features/graph-investigator/InvestigationChart'
 import { graphCases } from '@/data/graphCases'
 
+/**
+ * 미션1(잘린 축) 진입 후 observe 단계를 통과하는 헬퍼.
+ * observe 게이트: 그래프를 먼저 선택해야 check-values로 넘어감 (초등학생 참여 유도).
+ * 이후 check-values 게이트까지 통과하면 explain 단계 도달.
+ */
+async function enterMission1ThroughObserve(user: ReturnType<typeof userEvent.setup>) {
+  await user.click(screen.getByRole('button', { name: /사건 1\. 잘린 축 사건/ }))
+  // observe: 그래프 하나 선택 (게이트 통과). aria-label로 매칭.
+  const selectBtn = screen.getAllByRole('button', { name: /차이가 더 크게 보이는 그래프로 선택/ })[0]
+  await user.click(selectBtn)
+  // observe → check-values
+  await user.click(screen.getByRole('button', { name: /다음 단계로/ }))
+}
+
 describe('사양서 11.1절 시작 화면', () => {
   it('제목과 안내, 6개 사건 카드가 렌더링된다', () => {
     render(<GraphInvestigatorApp />)
@@ -98,14 +112,33 @@ describe('사양서 11.2절 미션 화면 - 그래프 비교', () => {
   })
 })
 
+describe('observe 단계 선택 게이트 (초등학생 참여 유도)', () => {
+  it('그래프를 선택하지 않으면 observe → check-values로 넘어갈 수 없다', async () => {
+    const user = userEvent.setup()
+    render(<GraphInvestigatorApp />)
+    await user.click(screen.getByRole('button', { name: /사건 1\. 잘린 축 사건/ }))
+    // 선택 없이 다음 → 게이트 메시지
+    await user.click(screen.getByRole('button', { name: /다음 단계로/ }))
+    const gate = await screen.findByRole('alert')
+    expect(gate).toHaveTextContent(/차이가 더 크게 보이는 쪽을 골라보세요/)
+  })
+
+  it('그래프를 선택하면 observe 힌트가 완료 상태로 바뀐다', async () => {
+    const user = userEvent.setup()
+    render(<GraphInvestigatorApp />)
+    await user.click(screen.getByRole('button', { name: /사건 1\. 잘린 축 사건/ }))
+    // 첫 번째 그래프(A) 선택 - aria-label로 매칭
+    const selectBtn = screen.getAllByRole('button', { name: /차이가 더 크게 보이는 그래프로 선택/ })[0]
+    await user.click(selectBtn)
+    expect(screen.getByText(/A번 그래프를 골랐어요/)).toBeInTheDocument()
+  })
+})
+
 describe('사양서 18절 위험 대응: 값 표 게이트', () => {
   it('값 표를 열지 않으면 check-values → explain으로 넘어갈 수 없다', async () => {
     const user = userEvent.setup()
     render(<GraphInvestigatorApp />)
-    // 미션1 진입
-    await user.click(screen.getByRole('button', { name: /사건 1\. 잘린 축 사건/ }))
-    // observe → check-values (한 번 next)
-    await user.click(screen.getByRole('button', { name: /다음 단계로/ }))
+    await enterMission1ThroughObserve(user)
     // check-values 단계 안내문 확인 (strong 태그로 분할되어 있어 부분 매치)
     await screen.findByText(/실제 숫자를 확인하세요/)
     // 값 표 열지 않고 다시 next → 게이트 메시지 (role=alert로 대기)
@@ -119,8 +152,7 @@ describe('사양서 18절 위험 대응: 값 표 게이트', () => {
   it('값 표를 열면 다음 단계로 넘어갈 수 있다', async () => {
     const user = userEvent.setup()
     render(<GraphInvestigatorApp />)
-    await user.click(screen.getByRole('button', { name: /사건 1\. 잘린 축 사건/ }))
-    await user.click(screen.getByRole('button', { name: /다음 단계로/ }))
+    await enterMission1ThroughObserve(user)
     // 값 표 열기
     await user.click(screen.getByRole('button', { name: /값 표 보기/ }))
     // 값 표 본문 등장 (최댓값 54)
@@ -136,8 +168,7 @@ describe('사양서 9절: 근거 선택 + 설명 문장', () => {
   it('근거 체크하면 설명이 나타나고 피드백이 업데이트된다', async () => {
     const user = userEvent.setup()
     render(<GraphInvestigatorApp />)
-    await user.click(screen.getByRole('button', { name: /사건 1\. 잘린 축 사건/ }))
-    await user.click(screen.getByRole('button', { name: /다음 단계로/ }))
+    await enterMission1ThroughObserve(user)
     await user.click(screen.getByRole('button', { name: /값 표 보기/ }))
     await user.click(screen.getByRole('button', { name: /다음 단계로/ }))
 
@@ -152,8 +183,7 @@ describe('사양서 9절: 근거 선택 + 설명 문장', () => {
   it('문장 틀 빈칸이 렌더링된다', async () => {
     const user = userEvent.setup()
     render(<GraphInvestigatorApp />)
-    await user.click(screen.getByRole('button', { name: /사건 1\. 잘린 축 사건/ }))
-    await user.click(screen.getByRole('button', { name: /다음 단계로/ }))
+    await enterMission1ThroughObserve(user)
     await user.click(screen.getByRole('button', { name: /값 표 보기/ }))
     await user.click(screen.getByRole('button', { name: /다음 단계로/ }))
     expect(screen.getByText(/설명 문장 완성하기/)).toBeInTheDocument()
@@ -167,9 +197,8 @@ describe('사양서 11.1절 축 수리 화면', () => {
   it('축 수리 패널에 시작값/끝값/눈금/단위 입력이 있다', async () => {
     const user = userEvent.setup()
     render(<GraphInvestigatorApp />)
-    await user.click(screen.getByRole('button', { name: /사건 1\. 잘린 축 사건/ }))
+    await enterMission1ThroughObserve(user)
     // repair 단계까지 진입 (observe → check-values[+값표] → explain → repair)
-    await user.click(screen.getByRole('button', { name: /다음 단계로/ }))
     await user.click(screen.getByRole('button', { name: /값 표 보기/ }))
     await user.click(screen.getByRole('button', { name: /다음 단계로/ }))
     await user.click(screen.getByRole('button', { name: /다음 단계로/ }))
@@ -184,8 +213,7 @@ describe('사양서 11.1절 축 수리 화면', () => {
   it('0 시작 공정한 축으로 고치면 인정 피드백이 나온다', async () => {
     const user = userEvent.setup()
     render(<GraphInvestigatorApp />)
-    await user.click(screen.getByRole('button', { name: /사건 1\. 잘린 축 사건/ }))
-    await user.click(screen.getByRole('button', { name: /다음 단계로/ }))
+    await enterMission1ThroughObserve(user)
     await user.click(screen.getByRole('button', { name: /값 표 보기/ }))
     await user.click(screen.getByRole('button', { name: /다음 단계로/ }))
     await user.click(screen.getByRole('button', { name: /다음 단계로/ }))
@@ -203,9 +231,8 @@ describe('사양서 11.1절 결과 카드', () => {
   it('reflect 단계에서 수사 기록 카드가 렌더링된다', async () => {
     const user = userEvent.setup()
     render(<GraphInvestigatorApp />)
-    await user.click(screen.getByRole('button', { name: /사건 1\. 잘린 축 사건/ }))
+    await enterMission1ThroughObserve(user)
     // repair까지 진입
-    await user.click(screen.getByRole('button', { name: /다음 단계로/ }))
     await user.click(screen.getByRole('button', { name: /값 표 보기/ }))
     await user.click(screen.getByRole('button', { name: /다음 단계로/ }))
     await user.click(screen.getByRole('button', { name: /다음 단계로/ }))

@@ -136,6 +136,18 @@ export function MissionScreen({
               onSelectVariant={selectGraph}
               forceZeroStart={zeroStartTool}
             />
+            {state.phase === 'observe' && (
+              <p
+                className={`gi-observe-hint ${state.selectedGraphId ? 'gi-hint-done' : ''}`}
+                aria-live="polite"
+              >
+                {state.selectedGraphId ? (
+                  <>✓ {state.selectedGraphId}번 그래프를 골랐어요. 이제 실제 값을 확인하러 가요.</>
+                ) : (
+                  <>두 그래프를 살펴보고, 차이가 더 크게 보이는 쪽을 골라보세요.</>
+                )}
+              </p>
+            )}
             {state.phase === 'check-values' && (
               <p className="gi-check-values-prompt">
                 그래프만 보지 말고, 위 <strong>값 표</strong>를 열어 실제 숫자를 확인하세요.

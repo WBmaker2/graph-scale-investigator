@@ -24,7 +24,7 @@ function createInitialState(missionId: string): InvestigationState {
 
 /**
  * 다음 단계로 진행 가능한지 판정하는 순수 함수 (단위 테스트 가능).
- *  - observe → check-values: 항상 가능
+ *  - observe → check-values: 그래프를 하나 골라야 (초등학생이 비교에 참여하도록 유도)
  *  - check-values → explain: 값 표를 열었을 때만 (사양서 18절 위험 대응)
  *  - 마지막 단계: 더 진행 불가
  */
@@ -32,6 +32,13 @@ export function canAdvance(state: InvestigationState): { ok: boolean; reason?: s
   const idx = PHASE_ORDER.indexOf(state.phase)
   if (idx < 0 || idx >= PHASE_ORDER.length - 1) {
     return { ok: false, reason: undefined }
+  }
+  // observe → check-values: 먼저 그래프를 비교하며 하나 골라야
+  if (state.phase === 'observe' && !state.selectedGraphId) {
+    return {
+      ok: false,
+      reason: '먼저 두 그래프를 살펴보고, 차이가 더 크게 보이는 쪽을 골라보세요.',
+    }
   }
   if (state.phase === 'check-values' && !state.valueTableOpened) {
     return {
