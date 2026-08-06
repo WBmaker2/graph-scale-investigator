@@ -9,14 +9,16 @@ type Props = {
   caseData: GraphCase
   opened: boolean
   onToggle: () => void
+  /** 필수 액션이 남아 강조 애니메이션을 켤지 (학생 안내) */
+  highlight?: boolean
 }
 
-export function ValueTable({ caseData, opened, onToggle }: Props) {
+export function ValueTable({ caseData, opened, onToggle, highlight = false }: Props) {
   return (
     <section className="gi-value-table-section" aria-labelledby="value-table-heading">
       <button
         type="button"
-        className="gi-tool-toggle"
+        className={`gi-tool-toggle ${highlight ? 'gi-pulse' : ''}`}
         onClick={onToggle}
         aria-expanded={opened}
         aria-controls="value-table-body"

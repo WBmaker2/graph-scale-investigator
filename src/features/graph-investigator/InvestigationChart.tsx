@@ -22,6 +22,8 @@ type Props = {
   /** 학생이 이 변형을 '더 크게 보인다'고 선택했는지 */
   selected?: boolean
   onSelect?: (variantId: string) => void
+  /** 선택 버튼 강조 애니메이션 (아직 선택 안 했을 때 학생 안내) */
+  highlightSelect?: boolean
 }
 
 const PATTERN_IDS = {
@@ -38,6 +40,7 @@ export function InvestigationChart({
   height = 280,
   selected = false,
   onSelect,
+  highlightSelect = false,
 }: Props) {
   const { axis } = variant
   const chartType = variant.chartType ?? caseData.chartType
@@ -89,7 +92,7 @@ export function InvestigationChart({
         {onSelect && (
           <button
             type="button"
-            className="gi-chart-select-btn"
+            className={`gi-chart-select-btn ${highlightSelect ? 'gi-pulse' : ''}`}
             onClick={() => onSelect(variant.id)}
             aria-pressed={selected}
             aria-label={`${variant.displayName}을(를) 차이가 더 크게 보이는 그래프로 선택`}

@@ -83,6 +83,12 @@ export function MissionScreen({
 
   const isLastPhase = state.phase === 'reflect'
 
+  // 필수 액션이 남았는지 (강조 애니메이션 대상). 학생에게 "지금 이걸 하세요" 안내.
+  const needsSelectGraph = state.phase === 'observe' && !state.selectedGraphId
+  const needsOpenValueTable = state.phase === 'check-values' && !state.valueTableOpened
+  // "다음 단계로" 강조: 현재 단계의 필수 액션이 남았을 때
+  const needsNext = needsSelectGraph || needsOpenValueTable
+
   return (
     <div className="gi-mission">
       <header className="gi-mission-header">
@@ -113,7 +119,12 @@ export function MissionScreen({
       </ol>
 
       {/* 값 표 - 모든 단계에서 접근 가능 (사양서 7.2절 "값 보기") */}
-      <ValueTable caseData={caseData} opened={valueTableOpen} onToggle={toggleValueTable} />
+      <ValueTable
+        caseData={caseData}
+        opened={valueTableOpen}
+        onToggle={toggleValueTable}
+        highlight={needsOpenValueTable}
+      />
 
       {/* 단계별 본문 */}
       <div className="gi-phase-body">
@@ -135,6 +146,7 @@ export function MissionScreen({
               selectedVariantId={state.selectedGraphId}
               onSelectVariant={selectGraph}
               forceZeroStart={zeroStartTool}
+              highlightSelect={needsSelectGraph}
             />
             {state.phase === 'observe' && (
               <p
@@ -197,7 +209,11 @@ export function MissionScreen({
           <button type="button" className="gi-link-btn" onClick={onPrev} disabled={missionIndex === 0}>
             이전 미션
           </button>
-          <button type="button" className="gi-primary-btn" onClick={handleNextPhase}>
+          <button
+            type="button"
+            className={`gi-primary-btn ${needsNext ? 'gi-pulse' : ''}`}
+            onClick={handleNextPhase}
+          >
             다음 단계로 →
           </button>
         </div>

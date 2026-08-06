@@ -16,6 +16,8 @@ type Props = {
   selectable?: boolean
   /** 강제로 0 시작 축으로 미리보기 (수사 도구 "축 0으로 보기") */
   forceZeroStart?: boolean
+  /** 선택 버튼 강조 애니메이션 (아직 선택 안 했을 때 학생 안내) */
+  highlightSelect?: boolean
 }
 
 export function GraphComparePanel({
@@ -24,6 +26,7 @@ export function GraphComparePanel({
   onSelectVariant,
   selectable = false,
   forceZeroStart = false,
+  highlightSelect = false,
 }: Props) {
   const [showValueLabels, setShowValueLabels] = useState(true)
   const [showActualDiff, setShowActualDiff] = useState(false)
@@ -69,6 +72,7 @@ export function GraphComparePanel({
               showActualDiff={showActualDiff}
               selected={selectable && selectedVariantId === v.id}
               onSelect={selectable ? onSelectVariant : undefined}
+              highlightSelect={highlightSelect && selectable && !selectedVariantId}
             />
           )
         })}

@@ -1197,6 +1197,37 @@ a {
   animation: gi-fade-up 0.4s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
+/* ---- 필수 액션 아우라 강조 (학생 안내) ----
+   게이트 통과 조건이 남은 버튼에 gi-pulse 클래스 부여.
+   box-shadow 색상/크기를 부드럽게 순환하며 "이 버튼을 누르세요" 안내.
+   transform/opacity는 건드리지 않아 레이아웃 흔들림 없음. */
+@keyframes gi-aura {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(2, 132, 199, 0);
+  }
+  50% {
+    box-shadow: 0 0 0 6px rgba(2, 132, 199, 0.18), var(--gi-shadow-md);
+  }
+}
+
+.gi-pulse {
+  animation: gi-aura 1.8s ease-in-out infinite;
+  position: relative;
+  z-index: 1;
+}
+
+/* 호버/포커스 시에는 강조를 멈춰 사용자가 인지했음을 표현 */
+.gi-pulse:hover,
+.gi-pulse:focus-visible {
+  animation: none;
+}
+
+/* 다음 단계 버튼 전용: 더 눈에 띄는 테두리 링 추가 */
+.gi-primary-btn.gi-pulse {
+  animation: gi-aura 1.8s ease-in-out infinite;
+}
+
 /* ---- 모션 줄이기 (사양서 12절) ---- */
 @media (prefers-reduced-motion: reduce) {
   *,
